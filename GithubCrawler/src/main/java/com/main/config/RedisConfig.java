@@ -13,7 +13,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 
-import com.main.entity.Employee;
+import com.main.entity.User;
 
 @Configuration
 public class RedisConfig {
@@ -25,8 +25,8 @@ public class RedisConfig {
       
     // Setting up the Redis template object. The time-to-live of Employee key is 5 seconds.
     @Bean
-    public RedisTemplate<String, Employee> redisTemplate() {
-        final RedisTemplate<String, Employee> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, User> redisTemplate() {
+        final RedisTemplate<String, User> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.afterPropertiesSet();
         redisTemplate.expire("User", 10,TimeUnit.MINUTES);

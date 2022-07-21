@@ -55,6 +55,13 @@ You can also visit the result page directly by http://localhost:8080/Users/{User
 ### Following Value Change:
 - State Hook is used to allowed the website to update followings value after each click without page refresh.
 
+### Backend Structure
+- MVC structure.
+- Controller Layer: Handle Restful api from React.
+- Service Later: Implement Bussiness Logic
+- DAO(Repository) layer: Data Acces to redis/github server.
+- Entity: Object Model (User and Repo in this project)
+
 ### Error Handling:
 - A error page is setted in react project. If the react cannot fetch the correct data from springboot (e.g. springboot is down, github api is refused by github, the user does not exist), the page will be redirect to error page.
 - The Exception Handling of Spring Boot is used its default Handler

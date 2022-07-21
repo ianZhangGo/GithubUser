@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import com.main.dao.EmployeeDAO;
 import com.main.dao.ReposDAO;
 import com.main.dao.UserDAO;
 import com.main.dao.impl.UserRedisDAOImpl;
-import com.main.entity.Employee;
 import com.main.entity.User;
 import com.main.service.UserService;
 
@@ -27,9 +25,6 @@ class GithubCrawlerApplicationTests {
 	
 	@Autowired
 	UserService userService;
-	
-	@Autowired
-	RedisTemplate<String, Employee> redisTemplate;
 	
 	@Test
 	void userDAOTest() {
