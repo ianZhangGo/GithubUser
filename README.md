@@ -34,9 +34,9 @@ sudo npx -s build -p 8080
 React website can be visited on localhost:8080
 
 The home page:
-<p></p>
+
 ![image info](./pictures/homeindex.JPG)
-<p></p>
+
 you can enter the github signin name into input box. Then click search button.
 
 The result pages will look like this.
