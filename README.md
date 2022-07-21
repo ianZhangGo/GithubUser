@@ -35,7 +35,7 @@ React website can be visited on localhost:8080
 
 The home page:
 <p></p>
-![image info](./pictures/homeindex.jpg)
+![image info](./pictures/homeindex.JPG)
 <p></p>
 you can enter the github signin name into input box. Then click search button.
 
