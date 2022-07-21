@@ -1,70 +1,64 @@
-# Getting Started with Create React App
+# Getting Started
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project use React as frontend and use java spring-boot as backend.
+Jar and Build files are also uploaded.
 
-## Available Scripts
+## Requirement
+- Java v11
+- node v16
+- Redis
 
-In the project directory, you can run:
+## Running code
 
-### `npm start`
+### Step1: start redis service
+```
+sudo service redis-server start
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Please make sure your redis service is running on port 6379
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Step2: start java springboot service
 
-### `npm test`
+under the folder "/GithubUser/GithubCrawler/"
+```
+java -jar GithubCrawler-0.0.1-SNAPSHOT.jar
+```
+springboot project will be on localhost:8000
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Step3: start react
+under the folder "GithubUser/githubreact/"
+```
+sudo npm install -g serve
+sudo npx -s build -p 8080
+```
+React website can be visited on localhost:8080
 
-### `npm run build`
+The home page:
+<p></p>
+![image info](./pictures/homeindex.jpg)
+<p></p>
+you can enter the github signin name into input box. Then click search button.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The result pages will look like this.
+![image info](./pictures/UserIndex.JPG)
+You can also visit the result page directly by http://localhost:8080/Users/{User}.
+## The basic logic of this application:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How to get the data:
+- Input "localhost:8080/Users/{User}" ---- react use useEffect to send Get "localhost:8000/Users/{User}" ---- Java Springboot Controller handle this request.
+- The requests to GitHub are divided to two part.
+	- 1. request the user information by https://api.github.com/users/octocat
+	- 2. request the user repos by https://api.github.com/users/octocat/repos
+- Currently, this application cannot extract private repo from github. If you want to access private repos, you should integrate OAuth with SpringBoot to obtain access token.
+- When the website is wating for the fetched date, the page show "Still loading...". If the react fail to fetch data. The page will be redirected to error page.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Following Value Change:
+- State Hook is used to allowed the website to update followings value after each click without page refresh.
 
-### `npm run eject`
+### Error Handling:
+- A error page is setted in react project. If the react cannot fetch the correct data from springboot (e.g. springboot is down, github api is refused by github, the user does not exist), the page will be redirect to error page.
+- The Exception Handling of Spring Boot is used its default Handler
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Redis:
+- Because github api has rate limitation and fetching data from Github server is time consuming, Redis is used to reduce latency.
+- The logic of redice: when react get request arrives spring boot, spring boot will firstly check whether the data exists in Redis. If yes, spring boot will get the data and referesh the expiration time of this data. If no, spring boot will make a request to github server and save the acquired data into redis with 10 minutes exipration time.
